@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>大五人格與職場優勢探索問卷</title>
-    <!-- 引入 Tailwind CSS 用於美化與手機排版 -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- 💡 更換為最穩定的 Tailwind CSS v3 核心，徹底解決 html2canvas 圖片生成崩潰問題 -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- 引入 Chart.js 用於繪製雷達圖 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- 引入 html2canvas 用於將網頁區塊轉為圖片下載 -->
@@ -128,7 +128,7 @@
         </div>
 
         <!-- 步驟四：感謝與結尾頁面 -->
-        <div id="step-thanks" class="hidden bg-white rounded-2xl shadow-sm p-8 text-center space-y-6 border border-slate-100 animate-fade-in">
+        <div id="step-thanks" class="hidden bg-white rounded-2xl shadow-sm p-8 text-center space-y-6 border border-slate-100">
             <div class="text-indigo-600 text-5xl">🎉</div>
             <h2 class="text-2xl font-black text-indigo-900">測驗已圓滿完成！</h2>
             <p class="text-slate-500 text-sm leading-relaxed">
@@ -145,7 +145,7 @@
 
     <!-- 頁尾 -->
     <footer class="bg-slate-800 text-slate-400 text-center py-4 text-xs border-t border-slate-700">
-        <p>© 2026 婦源重返職場訓練課程．特質探索工具</p>
+        <p>© 2026 婦女重返職場訓練課程．特質探索工具</p>
     </footer>
 
     <!-- JavaScript 邏輯控制 -->
@@ -172,7 +172,7 @@
             { id: 18, category: "A", text: "18. 我覺得大部分人基本上是心懷善意的", reverse: false },
             { id: 19, category: "A", text: "19. 雖然社會上有有些騙子，但我覺得大部分人還是可信的", reverse: false },
             { id: 20, category: "A", text: "20. 我不太關心別人是否受到不公正的待遇", reverse: true },
-            { id: 21, category: "A", text: "21. 我時常覺得別人的痛苦與我關", reverse: true },
+            { id: 21, category: "A", text: "21. 我時常覺得別人的痛苦與我無關", reverse: true },
             { id: 22, category: "A", text: "22. 我常為那些遭遇不幸的人感到難過", reverse: false },
             { id: 23, category: "A", text: "23. 我是那種只照顧好自己，不替別人擔憂的人", reverse: true },
             { id: 24, category: "A", text: "24. 當別人向我訴說不幸時，我常感到難過", reverse: false },
@@ -194,13 +194,12 @@
             { id: 40, category: "E", text: "40. 別人多認為我是一個熱情和友好的人", reverse: false }
         ];
 
-        // 各特質文本解析定義庫
         const traitInterpretations = {
             C: {
                 name: "認真盡責性",
                 high: "做事非常有條理、責任感強、具備卓越的執行力。適合行政管理、財務會計、專案控管等極其重視細節與系統化規劃的崗位。",
                 mid: "具備良好的責任心與高度靈活彈性，能在既定規範與臨場調整之間取得極佳平衡，適合絕大多數常規企業職務。",
-                low: "思維靈活多變、熱愛隨性應變，不喜歡被死板的計畫所綑綁。這讓您在需要高度彈性、臨場快速反應的自由工作或創意發發想職務中大放異彩。"
+                low: "思維靈活多變、熱愛隨性應變，不喜歡被死板的計畫所綑綁。這讓您在需要高度彈性、臨場快速反應的自由工作或創意發想職務中大放異彩。"
             },
             A: {
                 name: "宜人性",
@@ -232,7 +231,6 @@
         const itemsPerPage = 10;
         const answers = {}; 
 
-        // DOM 元素獲取
         const stepWelcome = document.getElementById('step-welcome');
         const stepQuiz = document.getElementById('step-quiz');
         const stepResult = document.getElementById('step-result');
@@ -244,7 +242,6 @@
         const btnDownload = document.getElementById('btn-download');
         const btnExit = document.getElementById('btn-exit');
 
-        // 步驟一：提交基本資料
         userInfoForm.addEventListener('submit', function(e) {
             e.preventDefault();
             document.getElementById('lbl-name').innerText = document.getElementById('user-name').value;
@@ -253,7 +250,6 @@
             renderPage();
         });
 
-        // 渲染題目分頁
         function renderPage() {
             qContainer.innerHTML = "";
             const start = currentPage * itemsPerPage;
@@ -303,12 +299,12 @@
             btnPrev.disabled = (currentPage === 0);
             if (currentPage === 3) {
                 btnNext.innerText = "送出問卷並查看優勢結果";
-                btnNext.classList.replace('bg-indigo-600', 'bg-emerald-600');
-                btnNext.classList.replace('hover:bg-indigo-700', 'hover:bg-emerald-700');
+                btnNext.classList.remove('bg-indigo-600');
+                btnNext.classList.add('bg-emerald-600');
             } else {
                 btnNext.innerText = "下一步";
-                btnNext.classList.replace('bg-emerald-600', 'bg-indigo-600');
-                btnNext.classList.replace('hover:bg-emerald-700', 'hover:bg-indigo-700');
+                btnNext.classList.remove('bg-emerald-600');
+                btnNext.classList.add('bg-indigo-600');
             }
 
             document.getElementById('quiz-progress-text').innerText = `頁面 ${currentPage + 1} / 4`;
@@ -398,6 +394,8 @@
                 },
                 options: {
                     responsive: true,
+                    // 💡 關閉雷達圖動畫特效，確保 html2canvas 擷取時不會因為正在跑動畫而抓不到內容或出錯
+                    animation: false, 
                     scales: {
                         r: {
                             min: 1,
@@ -461,6 +459,7 @@
             html2canvas(captureArea, {
                 scale: 2, 
                 useCORS: true,
+                allowTaint: true,
                 backgroundColor: "#ffffff"
             }).then(canvas => {
                 const image = canvas.toDataURL("image/png");
@@ -473,13 +472,13 @@
                 btnDownload.innerText = "📥 下載分析結果（保存圖片）";
                 btnDownload.disabled = false;
             }).catch(err => {
+                console.error(err);
                 alert("抱歉，圖片生成失敗，建議可以使用手機螢幕截圖保存結果。");
                 btnDownload.innerText = "📥 下載分析結果（保存圖片）";
                 btnDownload.disabled = false;
             });
         });
 
-        // 🚪 離開按鈕點擊事件：切換至感謝畫面
         btnExit.addEventListener('click', () => {
             stepResult.classList.add('hidden');
             stepThanks.classList.remove('hidden');
@@ -501,7 +500,7 @@
 
             console.log("【發送數據】正同步至 Google Sheets...", payload);
             
-            // ⚠️ 貼上程式碼後，請記得將下方引號內的文字換回您先前的 Google Apps Script 網址
+            // ⚠️ 請記得將下方引號內的文字換回您剛剛在「第一步」中產生的新 Google Apps Script 網址！
             const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbx7EgRQy-jBvDSCcY39LkdlGHVCrKODeqJW5Tqle_8pQLqMAZcUw0aZ8lq9QEl5e94/exec';
             
             fetch(googleScriptUrl, {
@@ -510,7 +509,7 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             })
-            .then(() => console.log("【同步成功】數據已寫入 Google Sheet。"))
+            .then(() => console.log("【同步成功】數據已發送。"))
             .catch(err => console.error("【同步失敗】錯誤訊息:", err));
         }
     </script>
