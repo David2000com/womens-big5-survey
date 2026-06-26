@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>大五人格與職場優勢探索問卷</title>
+    <!-- 引入 Tailwind CSS 用於美化與手機排版 -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- 引入 Chart.js 用於繪製雷達圖 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- 引入 html2canvas 用於將網頁區塊轉為圖片下載 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
 
+    <!-- 導覽列 -->
     <header class="bg-indigo-600 text-white shadow-md p-4 sticky top-0 z-50">
         <div class="max-w-2xl mx-auto flex justify-between items-center">
             <h1 class="text-lg font-bold tracking-wide">二度就業婦女職涯賦能</h1>
@@ -17,8 +21,10 @@
         </div>
     </header>
 
+    <!-- 主要內容區 -->
     <main class="flex-grow p-4 md:p-6 max-w-2xl w-full mx-auto">
 
+        <!-- 步驟一：首頁引言與基本資料 -->
         <div id="step-welcome" class="bg-white rounded-2xl shadow-sm p-6 space-y-6 border border-slate-100 animate-fade-in">
             <div class="text-center space-y-2">
                 <h2 class="text-2xl font-black text-indigo-900">大五人格與職場優勢探索問卷</h2>
@@ -56,7 +62,9 @@
             </form>
         </div>
 
+        <!-- 步驟二：問卷主體 -->
         <div id="step-quiz" class="hidden bg-white rounded-2xl shadow-sm p-6 space-y-6 border border-slate-100">
+            <!-- 進度條 -->
             <div class="space-y-1">
                 <div class="flex justify-between text-xs text-slate-400 font-medium">
                     <span id="quiz-progress-text">頁面 1 / 4</span>
@@ -67,23 +75,29 @@
                 </div>
             </div>
 
+            <!-- 題目容器 -->
             <div id="questions-container" class="space-y-6">
-                </div>
+                <!-- 由 JavaScript 動態生成題目 -->
+            </div>
 
+            <!-- 分頁按鈕 -->
             <div class="flex justify-between pt-4 border-t border-slate-100">
                 <button id="btn-prev" class="px-6 py-2 rounded-xl border border-slate-200 text-slate-500 font-bold hover:bg-slate-50 transition disabled:opacity-30 disabled:pointer-events-none cursor-pointer">上一步</button>
                 <button id="btn-next" class="px-6 py-2 rounded-xl bg-indigo-600 text-white font-bold hover:bg-indigo-700 transition cursor-pointer">下一步</button>
             </div>
         </div>
 
+        <!-- 步驟三：測驗結果 -->
         <div id="step-result" class="hidden space-y-6">
             
+            <!-- 將要被截圖下載的區塊開始 -->
             <div id="capture-area" class="bg-white rounded-2xl shadow-sm p-6 space-y-6 border border-slate-100 bg-white">
                 <div class="text-center space-y-1 border-b border-slate-100 pb-4">
                     <h2 class="text-xl font-black text-indigo-900" id="result-title">大五人格特質職場優勢報告</h2>
                     <p class="text-xs text-slate-400">填答人：<span id="lbl-name" class="font-bold text-slate-700"></span> | 探索屬於妳的專屬職涯定位</p>
                 </div>
 
+                <!-- 雷達圖容器 -->
                 <div class="w-full max-w-sm mx-auto p-2">
                     <canvas id="radarChart"></canvas>
                 </div>
@@ -92,9 +106,14 @@
                     💡 <strong>溫馨提醒：</strong>本報告的得分高低完全源自於您對自身特質的真實感受，旨在協助您了解當前的工作狀態，<strong>並未與他人進行比較</strong>。不論分數高低，每種特質在求才市場中都擁有不可替代的獨特優勢！
                 </div>
 
+                <!-- 詳細文字解析區 -->
                 <div class="space-y-4" id="analysis-text-container">
-                    </div>
+                    <!-- 由 JS 根據得分動態生成優勢說明 -->
+                </div>
             </div>
+            <!-- 將要被截圖下載的區塊結束 -->
+
+            <!-- 下載與操作按鈕 -->
             <div class="space-y-3">
                 <button id="btn-download" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition duration-200 flex justify-center items-center gap-2 cursor-pointer">
                     📥 下載分析結果（保存圖片）
@@ -102,19 +121,37 @@
                 <button onclick="window.location.reload()" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium py-2 px-4 rounded-xl transition text-sm cursor-pointer">
                     重新測驗
                 </button>
+                <button id="btn-exit" class="w-full bg-slate-600 hover:bg-slate-700 text-white font-medium py-2 px-4 rounded-xl transition text-sm cursor-pointer">
+                    🚪 完成並離開
+                </button>
             </div>
+        </div>
+
+        <!-- 步驟四：感謝與結尾頁面 -->
+        <div id="step-thanks" class="hidden bg-white rounded-2xl shadow-sm p-8 text-center space-y-6 border border-slate-100 animate-fade-in">
+            <div class="text-indigo-600 text-5xl">🎉</div>
+            <h2 class="text-2xl font-black text-indigo-900">測驗已圓滿完成！</h2>
+            <p class="text-slate-500 text-sm leading-relaxed">
+                親愛的姊妹，您的特質數據已成功同步。<br>
+                感謝您的參與，這份報告將成為您重返職場的強大基石。
+            </p>
+            <div class="p-4 bg-indigo-50 rounded-xl text-indigo-800 font-medium text-sm">
+                💪 尋回自信，大膽出發！祝您求職順利！
+            </div>
+            <p class="text-xs text-slate-400">現在您可以安全地關閉此瀏覽器視窗。</p>
         </div>
 
     </main>
 
+    <!-- 頁尾 -->
     <footer class="bg-slate-800 text-slate-400 text-center py-4 text-xs border-t border-slate-700">
-        <p>© 2026 婦女重返職場訓練課程．特質探索工具</p>
+        <p>© 2026 婦源重返職場訓練課程．特質探索工具</p>
     </footer>
 
+    <!-- JavaScript 邏輯控制 -->
     <script>
         // 40題大五人格簡式版題庫數據
         const questions = [
-            // 一、環境敏銳度（原神經質）
             { id: 1, category: "N", text: "1. 我擔心有什麼不好的事情要發生", reverse: false },
             { id: 2, category: "N", text: "2. 我常感到害怕", reverse: false },
             { id: 3, category: "N", text: "3. 有時我覺得自己一無是處", reverse: false },
@@ -123,7 +160,6 @@
             { id: 6, category: "N", text: "6. 在面對壓力時，我有種快要崩潰的感覺", reverse: false },
             { id: 7, category: "N", text: "7. 我常擔憂一些無關緊要的事情", reverse: false },
             { id: 8, category: "N", text: "8. 我常常感到內心不踏實", reverse: false },
-            // 二、認真盡責性
             { id: 9, category: "C", text: "9. 在工作上，我常只求能應付過去便可", reverse: true },
             { id: 10, category: "C", text: "10. 一旦確定了目標，我會堅持努力地實現它", reverse: false },
             { id: 11, category: "C", text: "11. 我常常是仔細考慮之後才做出決定", reverse: false },
@@ -132,16 +168,14 @@
             { id: 14, category: "C", text: "14. 我喜歡一開頭就把事情計畫好", reverse: false },
             { id: 15, category: "C", text: "15. 我工作或學習很勤奮", reverse: false },
             { id: 16, category: "C", text: "16. 我是個傾盡全力做事的人", reverse: false },
-            // 三、宜人性
             { id: 17, category: "A", text: "17. 儘管社會存在陰暗面，我仍相信人性總的來說是善良的", reverse: false },
             { id: 18, category: "A", text: "18. 我覺得大部分人基本上是心懷善意的", reverse: false },
             { id: 19, category: "A", text: "19. 雖然社會上有有些騙子，但我覺得大部分人還是可信的", reverse: false },
             { id: 20, category: "A", text: "20. 我不太關心別人是否受到不公正的待遇", reverse: true },
-            { id: 21, category: "A", text: "21. 我時常覺得別人的痛苦與我無關", reverse: true },
+            { id: 21, category: "A", text: "21. 我時常覺得別人的痛苦與我關", reverse: true },
             { id: 22, category: "A", text: "22. 我常為那些遭遇不幸的人感到難過", reverse: false },
             { id: 23, category: "A", text: "23. 我是那種只照顧好自己，不替別人擔憂的人", reverse: true },
             { id: 24, category: "A", text: "24. 當別人向我訴說不幸時，我常感到難過", reverse: false },
-            // 四、經驗開放性
             { id: 25, category: "O", text: "25. 我的想像力相當豐富", reverse: false },
             { id: 26, category: "O", text: "26. 我頭腦中經常充滿生動的畫面", reverse: false },
             { id: 27, category: "O", text: "27. 我對許多事情有著很強的好奇心", reverse: false },
@@ -150,7 +184,6 @@
             { id: 30, category: "O", text: "30. 我身上具有別人沒有的冒險精神", reverse: false },
             { id: 31, category: "O", text: "31. 我渴望學習一些新東西，即使它們與我的日常生活無關", reverse: false },
             { id: 32, category: "O", text: "32. 我很願意也很容易接受那些新事物、新觀點、新想法", reverse: false },
-            // 五、外向性
             { id: 33, category: "E", text: "33. 我喜歡參加社交與娛樂聚會", reverse: false },
             { id: 34, category: "E", text: "34. 我對人多的聚會感到乏味", reverse: true },
             { id: 35, category: "E", text: "35. 我盡量避免參加人多的聚會和嘈雜的環境", reverse: true },
@@ -167,7 +200,7 @@
                 name: "認真盡責性",
                 high: "做事非常有條理、責任感強、具備卓越的執行力。適合行政管理、財務會計、專案控管等極其重視細節與系統化規劃的崗位。",
                 mid: "具備良好的責任心與高度靈活彈性，能在既定規範與臨場調整之間取得極佳平衡，適合絕大多數常規企業職務。",
-                low: "思維靈活多變、熱愛隨性應變，不喜歡被死板的計畫所綑綁。這讓您在需要高度彈性、臨場快速反應的自由工作或創意發想職務中大放異彩。"
+                low: "思維靈活多變、熱愛隨性應變，不喜歡被死板的計畫所綑綁。這讓您在需要高度彈性、臨場快速反應的自由工作或創意發發想職務中大放異彩。"
             },
             A: {
                 name: "宜人性",
@@ -197,17 +230,19 @@
 
         let currentPage = 0;
         const itemsPerPage = 10;
-        const answers = {}; // 存放格式 { qId: score }
+        const answers = {}; 
 
         // DOM 元素獲取
         const stepWelcome = document.getElementById('step-welcome');
         const stepQuiz = document.getElementById('step-quiz');
         const stepResult = document.getElementById('step-result');
+        const stepThanks = document.getElementById('step-thanks');
         const userInfoForm = document.getElementById('user-info-form');
         const qContainer = document.getElementById('questions-container');
         const btnPrev = document.getElementById('btn-prev');
         const btnNext = document.getElementById('btn-next');
         const btnDownload = document.getElementById('btn-download');
+        const btnExit = document.getElementById('btn-exit');
 
         // 步驟一：提交基本資料
         userInfoForm.addEventListener('submit', function(e) {
@@ -234,7 +269,6 @@
                 qTitle.innerText = q.text;
                 qDiv.appendChild(qTitle);
 
-                // 生成李克特5點量表選項
                 const optionsDiv = document.createElement('div');
                 optionsDiv.className = "grid grid-cols-5 gap-1 text-center";
                 
@@ -266,7 +300,6 @@
                 qContainer.appendChild(qDiv);
             });
 
-            // 更新分頁按鈕狀態
             btnPrev.disabled = (currentPage === 0);
             if (currentPage === 3) {
                 btnNext.innerText = "送出問卷並查看優勢結果";
@@ -283,7 +316,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 更新進度條
         function updateProgressBar() {
             const answeredCount = Object.keys(answers).length;
             const percent = Math.round((answeredCount / questions.length) * 100);
@@ -291,7 +323,6 @@
             document.getElementById('quiz-progress-bar').style.width = `${percent}%`;
         }
 
-        // 分頁按鈕事件
         btnPrev.addEventListener('click', () => {
             if(currentPage > 0) {
                 currentPage--;
@@ -300,7 +331,6 @@
         });
 
         btnNext.addEventListener('click', () => {
-            // 檢查當前頁面是否全部填寫完畢
             const start = currentPage * itemsPerPage;
             const end = start + itemsPerPage;
             const pageQuestions = questions.slice(start, end);
@@ -315,26 +345,22 @@
                 currentPage++;
                 renderPage();
             } else {
-                // 送出問卷，計算結果
                 calculateAndShowResult();
             }
         });
 
-        //核心：計算分數與展示結果
         function calculateAndShowResult() {
             const scores = { N: 0, C: 0, A: 0, O: 0, E: 0 };
             const counts = { N: 8, C: 8, A: 8, O: 8, E: 8 };
 
             questions.forEach(q => {
                 let score = answers[q.id];
-                // 處理反向題邏輯
                 if(q.reverse) {
                     score = 6 - score;
                 }
                 scores[q.category] += score;
             });
 
-            // 計算出各維度平均分（滿分5分）
             const finalScores = {
                 N: parseFloat((scores.N / counts.N).toFixed(2)),
                 C: parseFloat((scores.C / counts.C).toFixed(2)),
@@ -343,25 +369,18 @@
                 E: parseFloat((scores.E / counts.E).toFixed(2))
             };
 
-            // 切換區塊
             stepQuiz.classList.add('hidden');
             stepResult.classList.remove('hidden');
 
-            // 繪製雷達圖
             initRadarChart(finalScores);
-
-            // 生成文字報告
             generateAnalysisText(finalScores);
-
-            // 【後台對接觸發點】
             sendDataToBackend(finalScores);
         }
 
-        // 繪製 Chart.js 雷達圖
         let myChart = null;
         function initRadarChart(scores) {
             const ctx = document.getElementById('radarChart').getContext('2d');
-            if(myChart) myChart.destroy(); // 防止重新觀看時疊加
+            if(myChart) myChart.destroy();
 
             myChart = new Chart(ctx, {
                 type: 'radar',
@@ -394,7 +413,6 @@
             });
         }
 
-        // 動態判定高、中、低分區間並渲染說明內容
         function generateAnalysisText(scores) {
             const container = document.getElementById('analysis-text-container');
             container.innerHTML = "";
@@ -433,16 +451,15 @@
             });
         }
 
-        // 下載分析結果為圖片功能 (核心特色)
+        // 下載圖片功能
         btnDownload.addEventListener('click', function() {
             btnDownload.innerText = "正在產出圖片中...";
             btnDownload.disabled = true;
 
             const captureArea = document.getElementById('capture-area');
             
-            // 使用 html2canvas 渲染整個報告區塊
             html2canvas(captureArea, {
-                scale: 2, // 提高解析度防模糊，適合手機儲存
+                scale: 2, 
                 useCORS: true,
                 backgroundColor: "#ffffff"
             }).then(canvas => {
@@ -462,6 +479,13 @@
             });
         });
 
+        // 🚪 離開按鈕點擊事件：切換至感謝畫面
+        btnExit.addEventListener('click', () => {
+            stepResult.classList.add('hidden');
+            stepThanks.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
         // 正式串接後台資料傳送
         function sendDataToBackend(finalScores) {
             const payload = {
@@ -477,8 +501,8 @@
 
             console.log("【發送數據】正同步至 Google Sheets...", payload);
             
-            // 請將下方的網址替換為您剛剛複製的網頁應用程式網址
-            const googleScriptUrl = '您的_GOOGLE_APPS_SCRIPT_URL';
+            // ⚠️ 貼上程式碼後，請記得將下方引號內的文字換回您先前的 Google Apps Script 網址
+            const googleScriptUrl = 'https://script.google.com/macros/s/AKfycbxV8_8-bfllkDOf4dfpOW-mkPlT5OuxlHT3tu_T9Ib77t6-yGC0SN-3D3T3Bobmg5w/exec';
             
             fetch(googleScriptUrl, {
                 method: 'POST',
